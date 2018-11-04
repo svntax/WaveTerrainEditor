@@ -1,0 +1,24 @@
+.ui-form-element {
+	display: block;
+	padding: 5px;
+}
+
+.ui-form label {
+	display: inline-block;
+	width: 150px;
+	text-align: right;
+	padding-right: 5px;
+}
+
+.ui-slider {
+	vertical-align: middle;
+}
+
+.ui-form select {
+	display: block;
+	margin: 5px;
+}
+
+.ui-wave-parameters {
+	margin: 5px;
+}

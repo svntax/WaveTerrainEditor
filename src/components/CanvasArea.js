@@ -27,20 +27,24 @@ class CanvasArea extends React.Component {
 		const topWave = this.props.topWave;
 		const bottomWave = this.props.bottomWave;
 		
+		const surfaceWaveOffsetY = Number.parseInt(this.props.surfaceWaveOffsetY);
+		const topWaveOffsetY = Number.parseInt(this.props.topWaveOffsetY);
+		const bottomWaveOffsetY = Number.parseInt(this.props.bottomWaveOffsetY);
+		
 		//Fill everything below the surface wave
 		ctx.fillStyle = "#000000";
 		const plot = this.props.surfaceWave.getPlot();
 		const topPlot = this.props.topWave.getPlot();
 		const bottomPlot = this.props.bottomWave.getPlot();
 		for(let i = 0; i < plot.length; i++){
-			ctx.fillRect(i, plot[i], 1, canvas.height - plot[i]);
+			ctx.fillRect(i, plot[i] + surfaceWaveOffsetY, 1, canvas.height*2);
 		}
 		
 		//Cut holes into terrain whenever bottomWave is above topWave
 		ctx.fillStyle = this.props.bgColor;
 		for(let x = 0; x < plot.length; x++){
-			if(bottomPlot[x] < topPlot[x]){
-				ctx.fillRect(x, bottomPlot[x], 1, topPlot[x] - bottomPlot[x]);
+			if(bottomPlot[x] + bottomWaveOffsetY < topPlot[x] + topWaveOffsetY){
+				ctx.fillRect(x, bottomPlot[x] + bottomWaveOffsetY, 1, topPlot[x] + topWaveOffsetY - bottomPlot[x] - bottomWaveOffsetY);
 			}
 		}
 		
@@ -52,7 +56,7 @@ class CanvasArea extends React.Component {
 				if(i == surfaceWave.numVertices){
 					x = surfaceWave.waveWidth - 8;
 				}
-				ctx.fillRect(x, plot[x], 8, 8);
+				ctx.fillRect(x, plot[x] + surfaceWaveOffsetY, 8, 8);
 			}
 			ctx.fillStyle = "#00ff00";
 			for(let i = 0; i <= topWave.numVertices; i++){
@@ -60,7 +64,7 @@ class CanvasArea extends React.Component {
 				if(i == topWave.numVertices){
 					x = topWave.waveWidth - 1;
 				}
-				ctx.fillRect(x, topPlot[x], 8, 8);
+				ctx.fillRect(x, topPlot[x] + topWaveOffsetY, 8, 8);
 			}
 			ctx.fillStyle = "#0000ff";
 			for(let i = 0; i <= bottomWave.numVertices; i++){
@@ -68,7 +72,7 @@ class CanvasArea extends React.Component {
 				if(i == bottomWave.numVertices){
 					x = bottomWave.waveWidth - 1;
 				}
-				ctx.fillRect(x, bottomPlot[x], 8, 8);
+				ctx.fillRect(x, bottomPlot[x] + bottomWaveOffsetY, 8, 8);
 			}
 		}
 		
@@ -77,11 +81,11 @@ class CanvasArea extends React.Component {
 			ctx.fillStyle = "#ff0000";
 			for(let x = 0; x <= plot.length; x++){
 				ctx.fillStyle = "#ff0000";
-				ctx.fillRect(x, plot[x], 2, 2);
+				ctx.fillRect(x, plot[x] + surfaceWaveOffsetY, 2, 2);
 				ctx.fillStyle = "#00ff00";
-				ctx.fillRect(x, topPlot[x], 2, 2);
+				ctx.fillRect(x, topPlot[x] + topWaveOffsetY, 2, 2);
 				ctx.fillStyle = "#0000ff";
-				ctx.fillRect(x, bottomPlot[x], 2, 2);
+				ctx.fillRect(x, bottomPlot[x] + bottomWaveOffsetY, 2, 2);
 			}
 		}
 	}

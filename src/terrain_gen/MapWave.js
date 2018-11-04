@@ -24,7 +24,7 @@ class MapWave {
 	}
 	
 	setNumVertices(amount){
-		if(this.numVertices > 2){
+		if(this.numVertices >= 2){
 			this.numVertices = amount;
 		}
 		else{
@@ -71,12 +71,6 @@ class MapWave {
 					this.plot[x] = Math.floor(this.cosineInterpolate(y1, y2, mapRange(x1, x2, 0, 1, x)));
 				}
 			}
-		}
-	}
-	
-	setOffsetY(offset){
-		for(let i = 0; i < this.plot.length; i++){
-			this.plot[i] += offset;
 		}
 	}
 	
