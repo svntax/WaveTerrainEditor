@@ -180,16 +180,11 @@ class App extends React.Component {
 	render(){
 		return (
 			<div className="app">
-				<h1>Map Editor</h1>
-				<p>Description</p>
-				<Button label="Generate New Map" onClick={this.generateRandomMap} />
-				<Button label="Toggle surfaces" onClick={this.toggleWaveSurfaces} />
-				<Button label="Toggle vertices" onClick={this.toggleVertices} />
+				<div className="ui-header">
+					<h1>Map Editor</h1>
+					<span>Description</span>
+				</div>
 				<form className="ui-form" onSubmit={this.handleSubmit}>
-					<select value={this.state.interpolationMethod} onChange={this.changeInterpolationMethod}>
-						<option value={0}>Linear Interpolation</option>
-						<option value={1}>Cosine Interpolation</option>
-					</select>
 					<div className="ui-wave-parameters" style={{background: "rgb(255, 128, 128)"}}>
 						<strong>Surface Wave (Red)</strong>
 						<div className="ui-form-element">
@@ -237,6 +232,16 @@ class App extends React.Component {
 					bottomWaveOffsetY={this.state.bottomWaveProperties.verticalOffset}
 					generateRandomMap={this.generateRandomMap}
 					verticesVisible={this.state.verticesVisible} waveSurfacesVisible={this.state.waveSurfacesVisible} />
+				<div className="ui-controls">
+					<strong>Controls</strong>
+					<Button label="Generate New Map" onClick={this.generateRandomMap} />
+					<Button label="Toggle surfaces" onClick={this.toggleWaveSurfaces} />
+					<Button label="Toggle vertices" onClick={this.toggleVertices} />
+					<select value={this.state.interpolationMethod} onChange={this.changeInterpolationMethod}>
+						<option value={0}>Linear Interpolation</option>
+						<option value={1}>Cosine Interpolation</option>
+					</select>
+				</div>
 			</div>
 		);
 	}
