@@ -34,6 +34,9 @@
 
 .ui-wave-parameters {
 	margin: 5px;
+	padding: 5px;
+	border-style: solid;
+	border-width: 2px;
 }
 
 .app select {
@@ -45,4 +48,5 @@
 	border-style: solid;
 	border-width: 2px;
 	background-color: #ffe6b3;
+	padding: 5px;
 }

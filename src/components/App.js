@@ -58,13 +58,10 @@ class App extends React.Component {
 		bottomWave.setInterpolationMethod(this.state.interpolationMethod);
 		
 		surfaceWave.setNumVertices(this.state.surfaceWaveProperties.numVertices);
-		//surfaceWave.setOffsetY(this.state.surfaceWaveProperties.verticalOffset);
 		
 		topWave.setNumVertices(this.state.topWaveProperties.numVertices);
-		//topWave.setOffsetY(this.state.topWaveProperties.verticalOffset);
 		
 		bottomWave.setNumVertices(this.state.bottomWaveProperties.numVertices);
-		//bottomWave.setOffsetY(this.state.bottomWaveProperties.verticalOffset);
 		
 		surfaceWave.generateWave();
 		topWave.generateWave();
@@ -156,7 +153,6 @@ class App extends React.Component {
 	}
 	
 	changeInterpolationMethod = (e) => {
-		//TODO should just regenerate using the same seed but different interpolation method
 		let surfaceWave = this.state.surfaceWave;
 		let topWave = this.state.topWave;
 		let bottomWave = this.state.bottomWave;
@@ -181,8 +177,13 @@ class App extends React.Component {
 		return (
 			<div className="app">
 				<div className="ui-header">
-					<h1>Map Editor</h1>
-					<span>Description</span>
+					<h1>Terrain Editor</h1>
+					<p>The terrain generation works as follows:</p>
+					<ol>
+						<li>Generate 3 waves called Surface, Top, and Bottom</li>
+						<li>Create terrain below the Surface wave</li>
+						<li>Remove terrain whenever the Bottom wave is above the Top wave</li>
+					</ol>
 				</div>
 				<form className="ui-form" onSubmit={this.handleSubmit}>
 					<div className="ui-wave-parameters" style={{background: "rgb(255, 128, 128)"}}>
@@ -190,7 +191,7 @@ class App extends React.Component {
 						<div className="ui-form-element">
 							<label>Vertices (2 to 25)</label>
 							<input className="ui-slider" type="range" min="2" max="25" onChange={this.onSurfaceWaveVerticesChange} />
-							<span>{this.state.surfaceWave.numVertices}</span>
+							<span>{this.state.surfaceWaveProperties.numVertices}</span>
 						</div>
 						<div className="ui-form-element">
 							<label>Vertical Offset</label>
