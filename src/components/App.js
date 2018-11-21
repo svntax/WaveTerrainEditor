@@ -33,6 +33,7 @@ class App extends React.Component {
 			waveSurfacesVisible: true,
 			verticesVisible: true,
 			interpolationMethod: 1,
+			mapData: "",
 			surfaceWaveProperties: {
 				numVertices: 12,
 				verticalOffset: 48
@@ -44,8 +45,62 @@ class App extends React.Component {
 			bottomWaveProperties: {
 				numVertices: 16,
 				verticalOffset: 60
-			}
+			},
+			surfaceVertices: "s,",
+			topVertices: "t,",
+			bottomVertices: "b,"
 		};
+	}
+	
+	componentDidMount() {
+		this.setSurfaceVertices(this.state.surfaceWave.verticesList);
+		this.setTopVertices(this.state.topWave.verticesList);
+		this.setBottomVertices(this.state.bottomWave.verticesList);
+	}
+	
+	exportMapData = () => {
+		//this.setSurfaceVertices(this.state.surfaceWave.verticesList);
+		//this.setTopVertices(this.state.topWave.verticesList);
+		//this.setBottomVertices(this.state.bottomWave.verticesList);
+		const rawData = this.state.surfaceVertices + this.state.topVertices + this.state.bottomVertices;
+		const encodedData = window.btoa(rawData);
+		this.setState({mapData: encodedData});
+	}
+	
+	//Elements in list are (x,y) pairs
+	setSurfaceVertices = (list) => {
+		let verticesData = "s,";
+		const yOffset = Number.parseInt(this.state.surfaceWaveProperties.verticalOffset);
+		for(let i = 0; i < list.length; i++){
+			verticesData += list[i].x + "," + (list[i].y + yOffset) + ",";
+		}
+		console.log(verticesData);
+		this.setState({surfaceVertices: verticesData});
+	}
+	
+	//Elements in list are (x,y) pairs
+	setTopVertices = (list) => {
+		let verticesData = "t,";
+		const yOffset = Number.parseInt(this.state.topWaveProperties.verticalOffset);
+		for(let i = 0; i < list.length; i++){
+			verticesData += list[i].x + "," + (list[i].y + yOffset) + ",";
+		}
+		this.setState({topVertices: verticesData});
+	}
+	
+	//Elements in list are (x,y) pairs
+	setBottomVertices = (list) => {
+		let verticesData = "b,";
+		const yOffset = Number.parseInt(this.state.bottomWaveProperties.verticalOffset);
+		for(let i = 0; i < list.length; i++){
+			if(i < list.length - 1){
+				verticesData += list[i].x + "," + (list[i].y + yOffset) + ",";
+			}
+			else{
+				verticesData += list[i].x + "," + (list[i].y + yOffset);
+			}
+		}
+		this.setState({bottomVertices: verticesData});
 	}
 	
 	generateRandomMap = () => {
@@ -67,6 +122,10 @@ class App extends React.Component {
 		topWave.generateWave();
 		bottomWave.generateWave();
 		
+		this.setSurfaceVertices(surfaceWave.verticesList);
+		this.setTopVertices(topWave.verticesList);
+		this.setBottomVertices(bottomWave.verticesList);
+		
 		this.setState({
 			surfaceWave: surfaceWave,
 			topWave: topWave,
@@ -78,6 +137,7 @@ class App extends React.Component {
 		let surfaceWave = this.state.surfaceWave;
 		surfaceWave.setNumVertices(e.target.value);
 		surfaceWave.generateWave();
+		this.setSurfaceVertices(surfaceWave.verticesList);
 		this.setState({
 			surfaceWave: surfaceWave,
 			surfaceWaveProperties: {
@@ -242,6 +302,10 @@ class App extends React.Component {
 						<option value={0}>Linear Interpolation</option>
 						<option value={1}>Cosine Interpolation</option>
 					</select>
+					<Button label="Export Map Data" onClick={this.exportMapData} />
+					<textarea className="ui-textbox" value={this.state.mapData} readOnly />
+					<h3>How To Use In Game</h3>
+					<p>Highlight and copy the text above. Then go back to the lobby and start the game.</p>
 				</div>
 			</div>
 		);
