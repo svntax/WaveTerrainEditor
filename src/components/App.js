@@ -59,9 +59,6 @@ class App extends React.Component {
 	}
 	
 	exportMapData = () => {
-		//this.setSurfaceVertices(this.state.surfaceWave.verticesList);
-		//this.setTopVertices(this.state.topWave.verticesList);
-		//this.setBottomVertices(this.state.bottomWave.verticesList);
 		const rawData = this.state.surfaceVertices + this.state.topVertices + this.state.bottomVertices;
 		const encodedData = window.btoa(rawData);
 		this.setState({mapData: encodedData});
@@ -74,7 +71,6 @@ class App extends React.Component {
 		for(let i = 0; i < list.length; i++){
 			verticesData += list[i].x + "," + (list[i].y + yOffset) + ",";
 		}
-		console.log(verticesData);
 		this.setState({surfaceVertices: verticesData});
 	}
 	
@@ -154,12 +150,14 @@ class App extends React.Component {
 				verticalOffset: e.target.value
 			}
 		});
+		this.setSurfaceVertices(this.state.surfaceWave.verticesList);
 	}
 	
 	onTopWaveVerticesChange = (e) => {
 		let topWave = this.state.topWave;
 		topWave.setNumVertices(e.target.value);
 		topWave.generateWave();
+		this.setTopVertices(topWave.verticesList);
 		this.setState({
 			topWave: topWave,
 			topWaveProperties: {
@@ -176,12 +174,14 @@ class App extends React.Component {
 				verticalOffset: e.target.value
 			}
 		});
+		this.setTopVertices(this.state.topWave.verticesList);
 	}
 	
 	onBottomWaveVerticesChange = (e) => {
 		let bottomWave = this.state.bottomWave;
 		bottomWave.setNumVertices(e.target.value);
 		bottomWave.generateWave();
+		this.setBottomVertices(bottomWave.verticesList);
 		this.setState({
 			bottomWave: bottomWave,
 			bottomWaveProperties: {
@@ -198,6 +198,7 @@ class App extends React.Component {
 				verticalOffset: e.target.value
 			}
 		});
+		this.setBottomVertices(this.state.bottomWave.verticesList);
 	}
 	
 	toggleWaveSurfaces = () => {

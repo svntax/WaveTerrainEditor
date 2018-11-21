@@ -42,6 +42,7 @@ class MapWave {
 	}
 	
 	generateVertices(){
+		this.verticesList = [];
 		for(let i = 0; i <= this.numVertices; i++){
 			let x = i * Math.floor(this.waveWidth / this.numVertices);
 			if(i == this.numVertices){
