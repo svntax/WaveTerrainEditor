@@ -8,22 +8,22 @@ import Button from "./Button";
 const VERTICAL_OFFSET_MIN = -200;
 const VERTICAL_OFFSET_MAX = 400;
 
+const MAP_WIDTH = 3072; //1280;
+const MAP_HEIGHT = 1280; //720;
+
 class App extends React.Component {
 	constructor(props){
 		super(props);
 		
-		let surfaceWave = new MapWave(1280, 300, 12345);
-		//surfaceWave.setOffsetY(48);
+		let surfaceWave = new MapWave(MAP_WIDTH, MAP_HEIGHT / 2, 12345);
 		surfaceWave.generateWave();
 		
-		let topWave = new MapWave(1280, 400, 12345);
-		topWave.setNumVertices(16);
-		//topWave.setOffsetY(90);
+		let topWave = new MapWave(MAP_WIDTH, 800, 12345);
+		topWave.setNumVertices(18);
 		topWave.generateWave();
 		
-		let bottomWave = new MapWave(1280, 400, 12345);
-		bottomWave.setNumVertices(16);
-		//bottomWave.setOffsetY(60);
+		let bottomWave = new MapWave(MAP_WIDTH, 600, 12345);
+		bottomWave.setNumVertices(22);
 		bottomWave.generateWave();
 		
 		this.state = {
@@ -39,11 +39,11 @@ class App extends React.Component {
 				verticalOffset: 48
 			},
 			topWaveProperties: {
-				numVertices: 16,
+				numVertices: 18,
 				verticalOffset: 90
 			},
 			bottomWaveProperties: {
-				numVertices: 16,
+				numVertices: 22,
 				verticalOffset: 60
 			},
 			surfaceVertices: "s,",
@@ -100,9 +100,9 @@ class App extends React.Component {
 	}
 	
 	generateRandomMap = () => {
-		let surfaceWave = new MapWave(1280, 300, 12345);
-		let topWave = new MapWave(1280, 400, 12345);
-		let bottomWave = new MapWave(1280, 400, 12345);
+		let surfaceWave = new MapWave(MAP_WIDTH, MAP_HEIGHT / 2, 12345);
+		let topWave = new MapWave(MAP_WIDTH, 800, 12345);
+		let bottomWave = new MapWave(MAP_WIDTH, 600, 12345);
 		
 		surfaceWave.setInterpolationMethod(this.state.interpolationMethod);
 		topWave.setInterpolationMethod(this.state.interpolationMethod);
@@ -287,7 +287,7 @@ class App extends React.Component {
 						</div>
 					</div>
 				</form>
-				<CanvasArea width={1280} height={720} bgColor="#eeeeee"
+				<CanvasArea width={MAP_WIDTH} height={MAP_HEIGHT} bgColor="#eeeeee"
 					surfaceWave={this.state.surfaceWave} topWave={this.state.topWave} bottomWave={this.state.bottomWave}
 					surfaceWaveOffsetY={this.state.surfaceWaveProperties.verticalOffset}
 					topWaveOffsetY={this.state.topWaveProperties.verticalOffset}
@@ -305,7 +305,7 @@ class App extends React.Component {
 					</select>
 					<Button label="Export Map Data" onClick={this.exportMapData} />
 					<textarea className="ui-textbox" value={this.state.mapData} readOnly />
-					<h3>How To Use In Game</h3>
+					<h3>How To Import Map In Game</h3>
 					<p>Highlight and copy the text above. Then go back to the lobby and start the game.</p>
 				</div>
 			</div>
