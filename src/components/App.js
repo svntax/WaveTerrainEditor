@@ -8,22 +8,22 @@ import Button from "./Button";
 const VERTICAL_OFFSET_MIN = -200;
 const VERTICAL_OFFSET_MAX = 400;
 
+const MAP_WIDTH = 3072; //1280;
+const MAP_HEIGHT = 1280; //720;
+
 class App extends React.Component {
 	constructor(props){
 		super(props);
 		
-		let surfaceWave = new MapWave(1280, 300, 12345);
-		//surfaceWave.setOffsetY(48);
+		let surfaceWave = new MapWave(MAP_WIDTH, MAP_HEIGHT / 2, 12345);
 		surfaceWave.generateWave();
 		
-		let topWave = new MapWave(1280, 400, 12345);
-		topWave.setNumVertices(16);
-		//topWave.setOffsetY(90);
+		let topWave = new MapWave(MAP_WIDTH, 800, 12345);
+		topWave.setNumVertices(18);
 		topWave.generateWave();
 		
-		let bottomWave = new MapWave(1280, 400, 12345);
-		bottomWave.setNumVertices(16);
-		//bottomWave.setOffsetY(60);
+		let bottomWave = new MapWave(MAP_WIDTH, 600, 12345);
+		bottomWave.setNumVertices(22);
 		bottomWave.generateWave();
 		
 		this.state = {
@@ -33,25 +33,76 @@ class App extends React.Component {
 			waveSurfacesVisible: true,
 			verticesVisible: true,
 			interpolationMethod: 1,
+			mapData: "",
 			surfaceWaveProperties: {
 				numVertices: 12,
 				verticalOffset: 48
 			},
 			topWaveProperties: {
-				numVertices: 16,
+				numVertices: 18,
 				verticalOffset: 90
 			},
 			bottomWaveProperties: {
-				numVertices: 16,
+				numVertices: 22,
 				verticalOffset: 60
-			}
+			},
+			surfaceVertices: "s,",
+			topVertices: "t,",
+			bottomVertices: "b,"
 		};
 	}
 	
+	componentDidMount() {
+		this.setSurfaceVertices(this.state.surfaceWave.verticesList);
+		this.setTopVertices(this.state.topWave.verticesList);
+		this.setBottomVertices(this.state.bottomWave.verticesList);
+	}
+	
+	exportMapData = () => {
+		const rawData = this.state.surfaceVertices + this.state.topVertices + this.state.bottomVertices;
+		const encodedData = window.btoa(rawData);
+		this.setState({mapData: encodedData});
+	}
+	
+	//Elements in list are (x,y) pairs
+	setSurfaceVertices = (list) => {
+		let verticesData = "s,";
+		const yOffset = Number.parseInt(this.state.surfaceWaveProperties.verticalOffset);
+		for(let i = 0; i < list.length; i++){
+			verticesData += list[i].x + "," + (list[i].y + yOffset) + ",";
+		}
+		this.setState({surfaceVertices: verticesData});
+	}
+	
+	//Elements in list are (x,y) pairs
+	setTopVertices = (list) => {
+		let verticesData = "t,";
+		const yOffset = Number.parseInt(this.state.topWaveProperties.verticalOffset);
+		for(let i = 0; i < list.length; i++){
+			verticesData += list[i].x + "," + (list[i].y + yOffset) + ",";
+		}
+		this.setState({topVertices: verticesData});
+	}
+	
+	//Elements in list are (x,y) pairs
+	setBottomVertices = (list) => {
+		let verticesData = "b,";
+		const yOffset = Number.parseInt(this.state.bottomWaveProperties.verticalOffset);
+		for(let i = 0; i < list.length; i++){
+			if(i < list.length - 1){
+				verticesData += list[i].x + "," + (list[i].y + yOffset) + ",";
+			}
+			else{
+				verticesData += list[i].x + "," + (list[i].y + yOffset);
+			}
+		}
+		this.setState({bottomVertices: verticesData});
+	}
+	
 	generateRandomMap = () => {
-		let surfaceWave = new MapWave(1280, 300, 12345);
-		let topWave = new MapWave(1280, 400, 12345);
-		let bottomWave = new MapWave(1280, 400, 12345);
+		let surfaceWave = new MapWave(MAP_WIDTH, MAP_HEIGHT / 2, 12345);
+		let topWave = new MapWave(MAP_WIDTH, 800, 12345);
+		let bottomWave = new MapWave(MAP_WIDTH, 600, 12345);
 		
 		surfaceWave.setInterpolationMethod(this.state.interpolationMethod);
 		topWave.setInterpolationMethod(this.state.interpolationMethod);
@@ -67,6 +118,10 @@ class App extends React.Component {
 		topWave.generateWave();
 		bottomWave.generateWave();
 		
+		this.setSurfaceVertices(surfaceWave.verticesList);
+		this.setTopVertices(topWave.verticesList);
+		this.setBottomVertices(bottomWave.verticesList);
+		
 		this.setState({
 			surfaceWave: surfaceWave,
 			topWave: topWave,
@@ -78,6 +133,7 @@ class App extends React.Component {
 		let surfaceWave = this.state.surfaceWave;
 		surfaceWave.setNumVertices(e.target.value);
 		surfaceWave.generateWave();
+		this.setSurfaceVertices(surfaceWave.verticesList);
 		this.setState({
 			surfaceWave: surfaceWave,
 			surfaceWaveProperties: {
@@ -94,12 +150,14 @@ class App extends React.Component {
 				verticalOffset: e.target.value
 			}
 		});
+		this.setSurfaceVertices(this.state.surfaceWave.verticesList);
 	}
 	
 	onTopWaveVerticesChange = (e) => {
 		let topWave = this.state.topWave;
 		topWave.setNumVertices(e.target.value);
 		topWave.generateWave();
+		this.setTopVertices(topWave.verticesList);
 		this.setState({
 			topWave: topWave,
 			topWaveProperties: {
@@ -116,12 +174,14 @@ class App extends React.Component {
 				verticalOffset: e.target.value
 			}
 		});
+		this.setTopVertices(this.state.topWave.verticesList);
 	}
 	
 	onBottomWaveVerticesChange = (e) => {
 		let bottomWave = this.state.bottomWave;
 		bottomWave.setNumVertices(e.target.value);
 		bottomWave.generateWave();
+		this.setBottomVertices(bottomWave.verticesList);
 		this.setState({
 			bottomWave: bottomWave,
 			bottomWaveProperties: {
@@ -138,6 +198,7 @@ class App extends React.Component {
 				verticalOffset: e.target.value
 			}
 		});
+		this.setBottomVertices(this.state.bottomWave.verticesList);
 	}
 	
 	toggleWaveSurfaces = () => {
@@ -226,7 +287,7 @@ class App extends React.Component {
 						</div>
 					</div>
 				</form>
-				<CanvasArea width={1280} height={720} bgColor="#eeeeee"
+				<CanvasArea width={MAP_WIDTH} height={MAP_HEIGHT} bgColor="#eeeeee"
 					surfaceWave={this.state.surfaceWave} topWave={this.state.topWave} bottomWave={this.state.bottomWave}
 					surfaceWaveOffsetY={this.state.surfaceWaveProperties.verticalOffset}
 					topWaveOffsetY={this.state.topWaveProperties.verticalOffset}
@@ -242,6 +303,10 @@ class App extends React.Component {
 						<option value={0}>Linear Interpolation</option>
 						<option value={1}>Cosine Interpolation</option>
 					</select>
+					<Button label="Export Map Data" onClick={this.exportMapData} />
+					<textarea className="ui-textbox" value={this.state.mapData} readOnly />
+					<h3>How To Import Map In Game</h3>
+					<p>Highlight and copy the text above. Then go back to the lobby and start the game.</p>
 				</div>
 			</div>
 		);

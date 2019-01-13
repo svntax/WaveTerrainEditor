@@ -28,6 +28,19 @@
 	padding-right: 5px;
 }
 
+.ui-textbox {
+	width: 250px;
+	height: 200px;
+	background-color: white;
+	border-style: solid;
+	border-width: 1px;
+	border-color: black;
+}
+
+textarea {
+	resize: none;
+}
+
 .ui-slider {
 	vertical-align: middle;
 }

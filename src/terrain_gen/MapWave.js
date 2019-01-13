@@ -12,6 +12,7 @@ class MapWave {
 		this.seed = seed; //TODO unused
 		this.numVertices = DEFAULT_NUM_VERTICES;
 		this.plot = [];
+		this.verticesList = [];
 		this.interpolationMethod = COSINE_INTERPOLATION;
 	}
 	
@@ -41,6 +42,7 @@ class MapWave {
 	}
 	
 	generateVertices(){
+		this.verticesList = [];
 		for(let i = 0; i <= this.numVertices; i++){
 			let x = i * Math.floor(this.waveWidth / this.numVertices);
 			if(i == this.numVertices){
@@ -48,6 +50,7 @@ class MapWave {
 			}
 			let y = Math.floor(Math.random() * this.waveHeight);//random.nextInt(waveHeight);
 			this.plot[x] = y;
+			this.verticesList[i] = {x: x, y: y};
 		}
 	}
 	
